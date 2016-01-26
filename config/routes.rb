@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  root 'portfolio_controller#home'
+
+  get 'portfolio_controller/home'
+  get 'portfolio_controller/about'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
