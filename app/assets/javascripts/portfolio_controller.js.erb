@@ -1,10 +1,25 @@
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
 $(document).ready(function(){
-  var x = 150;
-  var y = 150;
-  var dx = 2;
-  var dy = -4;
+  var bgs = ["<%= asset_path 'dark_geometric.png' %>", "<%= asset_path '3px-tile.png' %>", "<%= asset_path 'dark_mosaic.png' %>"];
+  var bgNames = ["Dark Geometric", "3px Tile", "Dark Mosaic"];
+
+  console.log(bgs);
+
+  var currbg = 0;
+  $(document).on('keyup', function(e){
+    if(e.keyCode == 40){
+      currbg++;
+      if(currbg == 3){
+        currbg = 0;
+      }
+
+      alert(bgNames[currbg]);
+      //$("body").css({"background-color" : "#FF0000"});
+      $("body").css({"background-image": "url("+bgs[currbg]+")"});
+    }
+  });
+
   var ctx;
 
   function init() {
@@ -33,7 +48,7 @@ $(document).ready(function(){
   }
 
   function draw() {
-    ctx.fillStyle("#BADA55");
+    ctx.fillStyle = "#BADA55";
     ctx.clearRect(0,0,300,300);
     ctx.rect(100,100,10,10);
     ctx.rect(115,115,10,10);
