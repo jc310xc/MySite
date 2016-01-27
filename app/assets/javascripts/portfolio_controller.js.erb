@@ -21,18 +21,57 @@ $(document).ready(function(){
   });
 
   var ctx;
+  var x = 0;
+  var y = 0;
+  var width = $("#mazeCanvas").width();
+  var height = $("#mazeCanvas").height();
+  var squareSize = 30;
+  var xMax = Math.floor(width/squareSize);
+  var yMax = Math.floor(height/squareSize);
+  var mazeArr;
+
+  var count = 0;
+
+  function initMaze(){
+    var maze = [];
+    for(var i = 0; i < xMax; i++){
+      maze[i] = [];
+      for(var j = 0; j < yMax; j++){
+        maze[i][j] = Math.round(Math.random());
+      }
+    }
+
+    return maze;
+  }
+
+  function logMaze(maze){
+    for(var i = 0; i < xMax; i++){
+      var outStr = "";
+      for(var j = 0; j < yMax; j++){
+        outStr += maze[i][j] + ",";
+      }
+      console.log(outStr);
+    }
+  }
 
   function init() {
     ctx = $('#mazeCanvas')[0].getContext("2d");
-    WIDTH = $("#mazeCanvas").width();
-    HEIGHT = $("#mazeCanvas").height();
 
     ctx.fillStyle = "#BADA55";
-    ctx.fillRect(100,100,10,10);
-    ctx.fillRect(111,100,10,10);
-    ctx.fillRect(122,100,10,10);
-    ctx.fillRect(133,100,10,10);
-    ctx.fillRect(144,100,10,10);
+    ctx.clearRect(0,0,width,height);
+
+    var mazeArr = initMaze();
+    logMaze(mazeArr);
+
+    for(i = 0; i < mazeArr.length; i++){
+      for(j = 0; j < mazeArr[i].length; j++){
+        if(mazeArr[i][j] == 1){
+          var drawX = i * (squareSize + 1);
+          var drawY = j * (squareSize + 1);
+          ctx.fillRect(drawX, drawY, squareSize, squareSize);
+        }
+      }
+    }
   }
 
   init();
