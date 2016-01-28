@@ -25,10 +25,36 @@ $(document).ready(function(){
   var y = 0;
   var width = $("#mazeCanvas").width();
   var height = $("#mazeCanvas").height();
-  var squareSize = 30;
+  var squareSize = 32;
   var xMax = Math.floor(width/squareSize);
   var yMax = Math.floor(height/squareSize);
   var mazeArr;
+
+  var north = 1, south = 2, east = 4, west = 8;
+
+  var direction = [];
+  direction[0] = north;
+  direction[1] = south;
+  direction[2] = west;
+  direction[3] = east;
+
+  var dx = [];
+  dx[north] = 0;
+  dx[south] = 0;
+  dx[west] = -1;
+  dx[east] = 1;
+
+  var dy = [];
+  dy[north] = -1;
+  dy[south] = 1;
+  dy[west] = 0;
+  dy[east] = 0;
+
+  var opposite = [];
+  opposite[north] = south;
+  opposite[south] = north;
+  opposite[east] = west;
+  opposite[west] = east;
 
   var count = 0;
 
@@ -37,11 +63,23 @@ $(document).ready(function(){
     for(var i = 0; i < xMax; i++){
       maze[i] = [];
       for(var j = 0; j < yMax; j++){
-        maze[i][j] = Math.round(Math.random());
+        maze[i][j] = Math.round((Math.random() * 15));
       }
     }
 
     return maze;
+  }
+
+  function carve_passages_from(cx, cy, grid){
+    /*direction = Math.round(Math.random() * 3);
+    directions.each do |direction|
+      nx, ny = cx + DX[direction], cy + DY[direction]
+      if ny.between?(0, grid.length-1) && nx.between?(0, grid[ny].length-1) && grid[ny][nx] == 0
+        grid[cy][cx] |= direction
+        grid[ny][nx] |= OPPOSITE[direction]
+        carve_passages_from(nx, ny, grid)
+      end
+    end*/
   }
 
   function logMaze(maze){
@@ -51,6 +89,87 @@ $(document).ready(function(){
         outStr += maze[i][j] + ",";
       }
       console.log(outStr);
+    }
+  }
+
+  function drawCell(cellType, x, y){
+    //0000
+    if(cellType == 0){
+      ctx.fillRect(x, y, squareSize, squareSize);
+    //0001
+    }else if(cellType == 1){
+      ctx.fillRect(x, y, squareSize/4, squareSize);
+      ctx.fillRect(x + (3*squareSize/4), y, squareSize/4, squareSize);
+      ctx.fillRect(x, y + (3*squareSize/4), squareSize, squareSize/4);
+    //0010
+    }else if(cellType == 2){
+      ctx.fillRect(x, y, squareSize/4, squareSize);
+      ctx.fillRect(x + (3*squareSize/4), y, squareSize/4, squareSize);
+      ctx.fillRect(x, y, squareSize, squareSize/4);
+    //0011
+    }else if(cellType == 3){
+      ctx.fillRect(x, y, squareSize/4, squareSize);
+      ctx.fillRect(x + (3*squareSize/4), y, squareSize/4, squareSize);
+    //0100
+    }else if(cellType == 4){
+      ctx.fillRect(x, y, squareSize/4, squareSize);
+      ctx.fillRect(x, y, squareSize, squareSize/4);
+      ctx.fillRect(x, y + (3*squareSize/4), squareSize, squareSize/4);
+    //0101
+    }else if(cellType == 5){
+      ctx.fillRect(x, y, squareSize/4, squareSize);
+      ctx.fillRect(x + (3*squareSize/4), y, squareSize/4, squareSize/4);
+      ctx.fillRect(x, y + (3*squareSize/4), squareSize, squareSize/4);
+    //0110
+    }else if(cellType == 6){
+      ctx.fillRect(x, y, squareSize/4, squareSize);
+      ctx.fillRect(x, y, squareSize, squareSize/4);
+      ctx.fillRect(x + (3*squareSize/4), y + (3*squareSize/4), squareSize/4, squareSize/4);
+    //0111
+    }else if(cellType == 7){
+      ctx.fillRect(x, y, squareSize/4, squareSize);
+      ctx.fillRect(x + (3*squareSize/4), y, squareSize/4, squareSize/4);
+      ctx.fillRect(x + (3*squareSize/4), y + (3*squareSize/4), squareSize/4, squareSize/4);
+    //1000
+    }else if(cellType == 8){
+      ctx.fillRect(x + (3*squareSize/4), y, squareSize/4, squareSize);
+      ctx.fillRect(x, y, squareSize, squareSize/4);
+      ctx.fillRect(x, y + (3*squareSize/4), squareSize, squareSize/4);
+    //1001
+    }else if(cellType == 9){
+      ctx.fillRect(x, y, squareSize/4, squareSize/4);
+      ctx.fillRect(x + (3*squareSize/4), y, squareSize/4, squareSize);
+      ctx.fillRect(x, y + (3*squareSize/4), squareSize, squareSize/4);
+    //1010
+    }else if(cellType == 10){
+      ctx.fillRect(x + (3*squareSize/4), y, squareSize/4, squareSize);
+      ctx.fillRect(x, y, squareSize, squareSize/4);
+      ctx.fillRect(x, y + (3*squareSize/4), squareSize/4, squareSize/4);
+    //1011
+    }else if(cellType == 11){
+      ctx.fillRect(x + (3*squareSize/4), y, squareSize/4, squareSize);
+      ctx.fillRect(x, y, squareSize/4, squareSize/4);
+      ctx.fillRect(x, y + (3*squareSize/4), squareSize/4, squareSize/4);
+    //1100
+    }else if(cellType == 12){
+      ctx.fillRect(x, y, squareSize, squareSize/4);
+      ctx.fillRect(x, y + (3*squareSize/4), squareSize, squareSize/4);
+    //1101
+    }else if(cellType == 13){
+      ctx.fillRect(x + (3*squareSize/4), y, squareSize/4, squareSize/4);
+      ctx.fillRect(x, y, squareSize/4, squareSize/4);
+      ctx.fillRect(x, y + (3*squareSize/4), squareSize, squareSize/4);
+    //1110
+    }else if(cellType == 14){
+      ctx.fillRect(x + (3*squareSize/4), y + (3*squareSize/4), squareSize/4, squareSize/4);
+      ctx.fillRect(x, y, squareSize, squareSize/4);
+      ctx.fillRect(x, y + (3*squareSize/4), squareSize/4, squareSize/4);
+    //1111
+    }else if(cellType == 15){
+      ctx.fillRect(x + (3*squareSize/4), y, squareSize/4, squareSize/4);
+      ctx.fillRect(x, y, squareSize/4, squareSize/4);
+      ctx.fillRect(x, y + (3*squareSize/4), squareSize/4, squareSize/4);
+      ctx.fillRect(x + (3*squareSize/4), y + (3*squareSize/4), squareSize/4, squareSize/4);
     }
   }
 
@@ -65,11 +184,9 @@ $(document).ready(function(){
 
     for(i = 0; i < mazeArr.length; i++){
       for(j = 0; j < mazeArr[i].length; j++){
-        if(mazeArr[i][j] == 1){
-          var drawX = i * (squareSize + 1);
-          var drawY = j * (squareSize + 1);
-          ctx.fillRect(drawX, drawY, squareSize, squareSize);
-        }
+        var drawX = i * squareSize;
+        var drawY = j * squareSize;
+        drawCell(mazeArr[i][j], drawX, drawY);
       }
     }
   }
