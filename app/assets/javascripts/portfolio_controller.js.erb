@@ -85,7 +85,6 @@ $(document).ready(function(){
       if(isBetween(nx, 0, maze.length - 1) && (isBetween(ny, 0, maze[0].length - 1) && maze[nx][ny] == 0)){
         maze[cx][cy] += dir;
         maze[nx][ny] += opposite[dir];
-        drawCell(maze[cx][cy], cx, cy);
         count++;
         carve_passages_from(count, nx, ny, maze);
         // setTimeout(function(){
@@ -93,6 +92,8 @@ $(document).ready(function(){
         // },100);
       }
     });
+
+    return maze;
   }
 
   function isBetween(num, lower, upper){
@@ -103,6 +104,7 @@ $(document).ready(function(){
     for(var i = 0; i < xMax; i++){
       var outStr = "";
       for(var j = 0; j < yMax; j++){
+        drawCell(maze[i][j], i, j);
         outStr += maze[i][j] + ",";
       }
       console.log(outStr);
@@ -200,6 +202,8 @@ $(document).ready(function(){
 
     var mazeArr = initMaze();
     mazeArr = carve_passages_from(0, 0, 0, mazeArr);
+
+    logMaze(mazeArr);
   }
 
   init();
