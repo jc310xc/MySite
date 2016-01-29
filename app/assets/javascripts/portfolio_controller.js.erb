@@ -32,23 +32,17 @@ $(document).ready(function(){
 
   var north = 1, south = 2, east = 4, west = 8;
 
-  var direction = [];
-  direction[0] = north;
-  direction[1] = south;
-  direction[2] = west;
-  direction[3] = east;
-
   var dx = [];
   dx[north] = 0;
   dx[south] = 0;
-  dx[west] = -1;
   dx[east] = 1;
+  dx[west] = -1;
 
   var dy = [];
   dy[north] = -1;
   dy[south] = 1;
-  dy[west] = 0;
   dy[east] = 0;
+  dy[west] = 0;
 
   var opposite = [];
   opposite[north] = south;
@@ -63,23 +57,46 @@ $(document).ready(function(){
     for(var i = 0; i < xMax; i++){
       maze[i] = [];
       for(var j = 0; j < yMax; j++){
-        maze[i][j] = Math.round((Math.random() * 15));
+        maze[i][j] = 0;
       }
     }
 
     return maze;
   }
 
-  function carve_passages_from(cx, cy, grid){
-    /*direction = Math.round(Math.random() * 3);
-    directions.each do |direction|
-      nx, ny = cx + DX[direction], cy + DY[direction]
-      if ny.between?(0, grid.length-1) && nx.between?(0, grid[ny].length-1) && grid[ny][nx] == 0
-        grid[cy][cx] |= direction
-        grid[ny][nx] |= OPPOSITE[direction]
-        carve_passages_from(nx, ny, grid)
-      end
-    end*/
+  //got this method from SO -> http://stackoverflow.com/questions/17118259/javascript-sort-list-randomly
+  function shuffleArray(a) { // Fisher-Yates shuffle, no side effects
+    var i = a.length, t, j;
+    a = a.slice();
+    while (--i) t = a[i], a[i] = a[j = ~~(Math.random() * (i+1))], a[j] = t;
+    return a;
+  }
+
+  function carve_passages_from(count, cx, cy, maze){
+    var dirs = shuffleArray([north, south, east, west]);
+
+    //logMaze(maze);
+
+    dirs.forEach(function(dir){
+      //reminder: north = 1, south = 2, east = 4, west = 8;
+      var nx = cx + dx[dir];
+      var ny = cy + dy[dir];
+
+      if(isBetween(nx, 0, maze.length - 1) && (isBetween(ny, 0, maze[0].length - 1) && maze[nx][ny] == 0)){
+        maze[cx][cy] += dir;
+        maze[nx][ny] += opposite[dir];
+        drawCell(maze[cx][cy], cx, cy);
+        count++;
+        carve_passages_from(count, nx, ny, maze);
+        // setTimeout(function(){
+        //   carve_passages_from(count, nx, ny, maze)
+        // },100);
+      }
+    });
+  }
+
+  function isBetween(num, lower, upper){
+    return (num >= lower && num <= upper);
   }
 
   function logMaze(maze){
@@ -92,7 +109,9 @@ $(document).ready(function(){
     }
   }
 
-  function drawCell(cellType, x, y){
+  function drawCell(cellType, xCoord, yCoord){
+    var x = xCoord * squareSize;
+    var y = yCoord * squareSize;
     //0000
     if(cellType == 0){
       ctx.fillRect(x, y, squareSize, squareSize);
@@ -180,15 +199,7 @@ $(document).ready(function(){
     ctx.clearRect(0,0,width,height);
 
     var mazeArr = initMaze();
-    logMaze(mazeArr);
-
-    for(i = 0; i < mazeArr.length; i++){
-      for(j = 0; j < mazeArr[i].length; j++){
-        var drawX = i * squareSize;
-        var drawY = j * squareSize;
-        drawCell(mazeArr[i][j], drawX, drawY);
-      }
-    }
+    mazeArr = carve_passages_from(0, 0, 0, mazeArr);
   }
 
   init();
