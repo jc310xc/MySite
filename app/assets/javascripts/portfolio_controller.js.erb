@@ -4,8 +4,6 @@ $(document).ready(function(){
   var bgs = ["<%= asset_path 'dark_geometric.png' %>", "<%= asset_path '3px-tile.png' %>", "<%= asset_path 'dark_mosaic.png' %>"];
   var bgNames = ["Dark Geometric", "3px Tile", "Dark Mosaic"];
 
-  console.log(bgs);
-
   var currbg = 0;
   $(document).on('keyup', function(e){
     if(e.keyCode == 40){
@@ -29,6 +27,7 @@ $(document).ready(function(){
   var xMax = Math.floor(width/squareSize);
   var yMax = Math.floor(height/squareSize);
   var mazeArr;
+  var path = [];
 
   var north = 1, south = 2, east = 4, west = 8;
 
@@ -85,6 +84,13 @@ $(document).ready(function(){
       if(isBetween(nx, 0, maze.length - 1) && (isBetween(ny, 0, maze[0].length - 1) && maze[nx][ny] == 0)){
         maze[cx][cy] += dir;
         maze[nx][ny] += opposite[dir];
+        var node = {
+          xCoord : cx,
+          yCoord : cy,
+          direction : maze[cx][cy],
+          finished : false
+        };
+        path.push(node);
         count++;
         carve_passages_from(count, nx, ny, maze);
         // setTimeout(function(){
@@ -93,7 +99,16 @@ $(document).ready(function(){
       }
     });
 
-    return maze;
+    var node = {
+      xCoord : cx,
+      yCoord : cy,
+      direction : maze[cx][cy],
+      finished : true
+    };
+
+    path.push(node);
+
+    return path;
   }
 
   function isBetween(num, lower, upper){
@@ -104,93 +119,227 @@ $(document).ready(function(){
     for(var i = 0; i < xMax; i++){
       var outStr = "";
       for(var j = 0; j < yMax; j++){
-        drawCell(maze[i][j], i, j);
+        drawCell(maze[i][j], i, j, true);
         outStr += maze[i][j] + ",";
       }
       console.log(outStr);
     }
   }
 
-  function drawCell(cellType, xCoord, yCoord){
+  function printPath(index){
+    if(index < path.length){
+      console.log(path[index]);
+
+      drawCell(path[index].direction, path[index].xCoord, path[index].yCoord, path[index].finished);
+
+      setTimeout(function(){
+        printPath(index+1);
+      }, 10);
+    }
+  }
+
+  function drawCell(cellType, xCoord, yCoord, finished){
     var x = xCoord * squareSize;
     var y = yCoord * squareSize;
     //0000
     if(cellType == 0){
       ctx.fillRect(x, y, squareSize, squareSize);
-    //0001
+    //0001 -- north
     }else if(cellType == 1){
       ctx.fillRect(x, y, squareSize/4, squareSize);
       ctx.fillRect(x + (3*squareSize/4), y, squareSize/4, squareSize);
       ctx.fillRect(x, y + (3*squareSize/4), squareSize, squareSize/4);
-    //0010
+      if(!finished){
+        ctx.fillStyle = "#f98484";
+      }else{
+        ctx.fillStyle = "#ffffff";
+      }
+      ctx.fillRect(x + (squareSize/4), y, squareSize/2, 3*squareSize/4);
+      ctx.fillStyle = "#bada55";
+    //0010 -- south
     }else if(cellType == 2){
       ctx.fillRect(x, y, squareSize/4, squareSize);
       ctx.fillRect(x + (3*squareSize/4), y, squareSize/4, squareSize);
       ctx.fillRect(x, y, squareSize, squareSize/4);
-    //0011
+      if(!finished){
+        ctx.fillStyle = "#f98484";
+      }else{
+        ctx.fillStyle = "#ffffff";
+      }
+
+      ctx.fillRect(x + (squareSize/4), y + (squareSize/4), squareSize/2, 3*squareSize/4);
+      ctx.fillStyle = "#bada55";
+    //0011 -- north, south
     }else if(cellType == 3){
       ctx.fillRect(x, y, squareSize/4, squareSize);
       ctx.fillRect(x + (3*squareSize/4), y, squareSize/4, squareSize);
-    //0100
+
+      if(!finished){
+        ctx.fillStyle = "#f98484";
+      }else{
+        ctx.fillStyle = "#ffffff";
+      }
+
+      ctx.fillRect(x + (squareSize/4), y, squareSize/2, squareSize);
+      ctx.fillStyle = "#bada55";
+    //0100 -- east
     }else if(cellType == 4){
       ctx.fillRect(x, y, squareSize/4, squareSize);
       ctx.fillRect(x, y, squareSize, squareSize/4);
       ctx.fillRect(x, y + (3*squareSize/4), squareSize, squareSize/4);
-    //0101
+
+      if(!finished){
+        ctx.fillStyle = "#f98484";
+      }else{
+        ctx.fillStyle = "#ffffff";
+      }
+
+      ctx.fillRect(x + (squareSize/4), y + (squareSize/4), 3*squareSize/4, squareSize/2);
+      ctx.fillStyle = "#bada55";
+    //0101 -- east, north
     }else if(cellType == 5){
       ctx.fillRect(x, y, squareSize/4, squareSize);
       ctx.fillRect(x + (3*squareSize/4), y, squareSize/4, squareSize/4);
       ctx.fillRect(x, y + (3*squareSize/4), squareSize, squareSize/4);
-    //0110
+      if(!finished){
+        ctx.fillStyle = "#f98484";
+      }else{
+        ctx.fillStyle = "#ffffff";
+      }
+
+      ctx.fillRect(x + (squareSize/4), y, squareSize/2, 3*squareSize/4);
+      ctx.fillRect(x + (3*squareSize/4), y + (squareSize/4), squareSize/4, squareSize/2);
+      ctx.fillStyle = "#bada55";
+    //0110 -- east, south
     }else if(cellType == 6){
       ctx.fillRect(x, y, squareSize/4, squareSize);
       ctx.fillRect(x, y, squareSize, squareSize/4);
       ctx.fillRect(x + (3*squareSize/4), y + (3*squareSize/4), squareSize/4, squareSize/4);
-    //0111
+      if(!finished){
+        ctx.fillStyle = "#f98484";
+      }else{
+        ctx.fillStyle = "#ffffff";
+      }
+
+      ctx.fillRect(x + (squareSize/4), y + (squareSize/4), squareSize/2, 3*squareSize/4);
+      ctx.fillRect(x + (3*squareSize/4), y + (squareSize/4), squareSize/4, squareSize/2);
+      ctx.fillStyle = "#bada55";
+    //0111 -- east, south, north
     }else if(cellType == 7){
       ctx.fillRect(x, y, squareSize/4, squareSize);
       ctx.fillRect(x + (3*squareSize/4), y, squareSize/4, squareSize/4);
       ctx.fillRect(x + (3*squareSize/4), y + (3*squareSize/4), squareSize/4, squareSize/4);
-    //1000
+      if(!finished){
+        ctx.fillStyle = "#f98484";
+      }else{
+        ctx.fillStyle = "#ffffff";
+      }
+      ctx.fillRect(x + (squareSize/4), y, squareSize/2, squareSize);
+      ctx.fillRect(x + (3*squareSize/4), y + (squareSize/4), squareSize/4, squareSize/2);
+      ctx.fillStyle = "#bada55";
+    //1000 -- west
     }else if(cellType == 8){
       ctx.fillRect(x + (3*squareSize/4), y, squareSize/4, squareSize);
       ctx.fillRect(x, y, squareSize, squareSize/4);
       ctx.fillRect(x, y + (3*squareSize/4), squareSize, squareSize/4);
-    //1001
+      if(!finished){
+        ctx.fillStyle = "#f98484";
+      }else{
+        ctx.fillStyle = "#ffffff";
+      }
+      ctx.fillRect(x, y + (squareSize/4), 3*squareSize/4, squareSize/2);
+      ctx.fillStyle = "#bada55";
+    //1001 -- west, north
     }else if(cellType == 9){
       ctx.fillRect(x, y, squareSize/4, squareSize/4);
       ctx.fillRect(x + (3*squareSize/4), y, squareSize/4, squareSize);
       ctx.fillRect(x, y + (3*squareSize/4), squareSize, squareSize/4);
-    //1010
+      if(!finished){
+        ctx.fillStyle = "#f98484";
+      }else{
+        ctx.fillStyle = "#ffffff";
+      }
+      ctx.fillRect(x + (squareSize/4), y, squareSize/2, 3*squareSize/4);
+      ctx.fillRect(x, y + (squareSize/4), squareSize/4, squareSize/2);
+      ctx.fillStyle = "#bada55";
+    //1010 -- west, south
     }else if(cellType == 10){
       ctx.fillRect(x + (3*squareSize/4), y, squareSize/4, squareSize);
       ctx.fillRect(x, y, squareSize, squareSize/4);
       ctx.fillRect(x, y + (3*squareSize/4), squareSize/4, squareSize/4);
-    //1011
+      if(!finished){
+        ctx.fillStyle = "#f98484";
+      }else{
+        ctx.fillStyle = "#ffffff";
+      }
+      ctx.fillRect(x + (squareSize/4), y + (squareSize/4), squareSize/2, 3*squareSize/4);
+      ctx.fillRect(x, y + (squareSize/4), squareSize/4, squareSize/2);
+      ctx.fillStyle = "#bada55";
+    //1011 -- west, south, north
     }else if(cellType == 11){
       ctx.fillRect(x + (3*squareSize/4), y, squareSize/4, squareSize);
       ctx.fillRect(x, y, squareSize/4, squareSize/4);
       ctx.fillRect(x, y + (3*squareSize/4), squareSize/4, squareSize/4);
-    //1100
+      if(!finished){
+        ctx.fillStyle = "#f98484";
+      }else{
+        ctx.fillStyle = "#ffffff";
+      }
+      ctx.fillRect(x + (squareSize/4), y, squareSize/2, squareSize);
+      ctx.fillRect(x, y + (squareSize/4), squareSize/4, squareSize/2);
+      ctx.fillStyle = "#bada55";
+    //1100 -- west, east
     }else if(cellType == 12){
       ctx.fillRect(x, y, squareSize, squareSize/4);
       ctx.fillRect(x, y + (3*squareSize/4), squareSize, squareSize/4);
-    //1101
+      if(!finished){
+        ctx.fillStyle = "#f98484";
+      }else{
+        ctx.fillStyle = "#ffffff";
+      }
+      ctx.fillRect(x, y + (squareSize/4), squareSize, squareSize/2);
+      ctx.fillStyle = "#bada55";
+    //1101 -- west, east, north
     }else if(cellType == 13){
       ctx.fillRect(x + (3*squareSize/4), y, squareSize/4, squareSize/4);
       ctx.fillRect(x, y, squareSize/4, squareSize/4);
       ctx.fillRect(x, y + (3*squareSize/4), squareSize, squareSize/4);
-    //1110
+      if(!finished){
+        ctx.fillStyle = "#f98484";
+      }else{
+        ctx.fillStyle = "#ffffff";
+      }
+      ctx.fillRect(x, y + (squareSize/4), squareSize, squareSize/2);
+      ctx.fillRect(x + (squareSize/4), y, squareSize/2, squareSize/4);
+      ctx.fillStyle = "#bada55";
+    //1110 -- west, east, south
     }else if(cellType == 14){
       ctx.fillRect(x + (3*squareSize/4), y + (3*squareSize/4), squareSize/4, squareSize/4);
       ctx.fillRect(x, y, squareSize, squareSize/4);
       ctx.fillRect(x, y + (3*squareSize/4), squareSize/4, squareSize/4);
-    //1111
+      if(!finished){
+        ctx.fillStyle = "#f98484";
+      }else{
+        ctx.fillStyle = "#ffffff";
+      }
+      ctx.fillRect(x, y + (squareSize/4), squareSize, squareSize/2);
+      ctx.fillRect(x + (squareSize/4), y + (3*squareSize/4), squareSize/2, squareSize/4);
+      ctx.fillStyle = "#bada55";
+    //1111 -- all of em
     }else if(cellType == 15){
       ctx.fillRect(x + (3*squareSize/4), y, squareSize/4, squareSize/4);
       ctx.fillRect(x, y, squareSize/4, squareSize/4);
       ctx.fillRect(x, y + (3*squareSize/4), squareSize/4, squareSize/4);
       ctx.fillRect(x + (3*squareSize/4), y + (3*squareSize/4), squareSize/4, squareSize/4);
+      if(!finished){
+        ctx.fillStyle = "#f98484";
+      }else{
+        ctx.fillStyle = "#ffffff";
+      }
+      ctx.fillRect(x, y + (squareSize/4), squareSize, squareSize/2);
+      ctx.fillRect(x + (squareSize/4), y + (3*squareSize/4), squareSize/2, squareSize/4);
+      ctx.fillRect(x + (squareSize/4), y, squareSize/2, squareSize/4);
+      ctx.fillStyle = "#bada55";
     }
   }
 
@@ -201,9 +350,9 @@ $(document).ready(function(){
     ctx.clearRect(0,0,width,height);
 
     var mazeArr = initMaze();
-    mazeArr = carve_passages_from(0, 0, 0, mazeArr);
+    path = carve_passages_from(0, Math.round(Math.random() * xMax), Math.round(Math.random() * yMax), mazeArr);
 
-    logMaze(mazeArr);
+    printPath(0);
   }
 
   init();
