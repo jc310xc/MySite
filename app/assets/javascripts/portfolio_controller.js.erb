@@ -81,6 +81,7 @@ $(document).ready(function(){
       var nx = cx + dx[dir];
       var ny = cy + dy[dir];
 
+      //if(isBetween(nx, 0, maze.length - 1) && (isBetween(ny, 0, maze[0].length - 1) && maze[nx][ny] == 0)){
       if(isBetween(nx, 0, maze.length - 1) && (isBetween(ny, 0, maze[0].length - 1) && maze[nx][ny] == 0)){
         maze[cx][cy] += dir;
         maze[nx][ny] += opposite[dir];
@@ -134,7 +135,7 @@ $(document).ready(function(){
 
       setTimeout(function(){
         printPath(index+1);
-      }, 10);
+      }, 1);
     }
   }
 
@@ -350,7 +351,21 @@ $(document).ready(function(){
     ctx.clearRect(0,0,width,height);
 
     var mazeArr = initMaze();
-    path = carve_passages_from(0, Math.round(Math.random() * xMax), Math.round(Math.random() * yMax), mazeArr);
+    path = carve_passages_from(0, Math.round(Math.random() * (xMax - 1)), Math.round(Math.random() * (yMax - 1)), mazeArr);
+
+    path.push({
+        xCoord : 0,
+        yCoord : 0,
+        direction : mazeArr[0][0] + 1,
+        finished : true
+    });
+
+    path.push({
+        xCoord : xMax - 1,
+        yCoord : yMax - 1,
+        direction : mazeArr[xMax - 1][yMax - 1] + 2,
+        finished : true
+    });
 
     printPath(0);
   }
