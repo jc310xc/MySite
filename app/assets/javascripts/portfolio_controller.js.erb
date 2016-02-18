@@ -125,7 +125,7 @@ $(document).ready(function(){
     for(var i = 0; i < xMax; i++){
       var outStr = "";
       for(var j = 0; j < yMax; j++){
-        drawCell(maze[i][j], i, j, true);
+        drawCell(maze[i][j], i, j, "#ffffff");
         outStr += maze[i][j] + ",";
       }
       console.log(outStr);
@@ -134,9 +134,13 @@ $(document).ready(function(){
 
   function printPath(index){
     if(index < path.length){
-      console.log(path[index]);
+      var color = "#ffffff"
 
-      drawCell(path[index].direction, path[index].xCoord, path[index].yCoord, path[index].finished);
+      if(!path[index]){
+        color = "#f98484"
+      }
+
+      drawCell(path[index].direction, path[index].xCoord, path[index].yCoord, color);
 
       setTimeout(function(){
         printPath(index+1);
@@ -144,7 +148,7 @@ $(document).ready(function(){
     }
   }
 
-  function drawCell(cellType, xCoord, yCoord, finished){
+  function drawCell(cellType, xCoord, yCoord, color){
     var x = xCoord * squareSize;
     var y = yCoord * squareSize;
     //0000
@@ -155,11 +159,8 @@ $(document).ready(function(){
       ctx.fillRect(x, y, squareSize/4, squareSize);
       ctx.fillRect(x + (3*squareSize/4), y, squareSize/4, squareSize);
       ctx.fillRect(x, y + (3*squareSize/4), squareSize, squareSize/4);
-      if(!finished){
-        ctx.fillStyle = "#f98484";
-      }else{
-        ctx.fillStyle = "#ffffff";
-      }
+
+      ctx.fillStyle = color;
       ctx.fillRect(x + (squareSize/4), y, squareSize/2, 3*squareSize/4);
       ctx.fillStyle = "#bada55";
     //0010 -- south
@@ -167,11 +168,8 @@ $(document).ready(function(){
       ctx.fillRect(x, y, squareSize/4, squareSize);
       ctx.fillRect(x + (3*squareSize/4), y, squareSize/4, squareSize);
       ctx.fillRect(x, y, squareSize, squareSize/4);
-      if(!finished){
-        ctx.fillStyle = "#f98484";
-      }else{
-        ctx.fillStyle = "#ffffff";
-      }
+
+      ctx.fillStyle = color;
 
       ctx.fillRect(x + (squareSize/4), y + (squareSize/4), squareSize/2, 3*squareSize/4);
       ctx.fillStyle = "#bada55";
@@ -180,11 +178,7 @@ $(document).ready(function(){
       ctx.fillRect(x, y, squareSize/4, squareSize);
       ctx.fillRect(x + (3*squareSize/4), y, squareSize/4, squareSize);
 
-      if(!finished){
-        ctx.fillStyle = "#f98484";
-      }else{
-        ctx.fillStyle = "#ffffff";
-      }
+      ctx.fillStyle = color;
 
       ctx.fillRect(x + (squareSize/4), y, squareSize/2, squareSize);
       ctx.fillStyle = "#bada55";
@@ -194,11 +188,7 @@ $(document).ready(function(){
       ctx.fillRect(x, y, squareSize, squareSize/4);
       ctx.fillRect(x, y + (3*squareSize/4), squareSize, squareSize/4);
 
-      if(!finished){
-        ctx.fillStyle = "#f98484";
-      }else{
-        ctx.fillStyle = "#ffffff";
-      }
+      ctx.fillStyle = color;
 
       ctx.fillRect(x + (squareSize/4), y + (squareSize/4), 3*squareSize/4, squareSize/2);
       ctx.fillStyle = "#bada55";
@@ -207,11 +197,8 @@ $(document).ready(function(){
       ctx.fillRect(x, y, squareSize/4, squareSize);
       ctx.fillRect(x + (3*squareSize/4), y, squareSize/4, squareSize/4);
       ctx.fillRect(x, y + (3*squareSize/4), squareSize, squareSize/4);
-      if(!finished){
-        ctx.fillStyle = "#f98484";
-      }else{
-        ctx.fillStyle = "#ffffff";
-      }
+
+      ctx.fillStyle = color;
 
       ctx.fillRect(x + (squareSize/4), y, squareSize/2, 3*squareSize/4);
       ctx.fillRect(x + (3*squareSize/4), y + (squareSize/4), squareSize/4, squareSize/2);
@@ -221,11 +208,8 @@ $(document).ready(function(){
       ctx.fillRect(x, y, squareSize/4, squareSize);
       ctx.fillRect(x, y, squareSize, squareSize/4);
       ctx.fillRect(x + (3*squareSize/4), y + (3*squareSize/4), squareSize/4, squareSize/4);
-      if(!finished){
-        ctx.fillStyle = "#f98484";
-      }else{
-        ctx.fillStyle = "#ffffff";
-      }
+
+      ctx.fillStyle = color;
 
       ctx.fillRect(x + (squareSize/4), y + (squareSize/4), squareSize/2, 3*squareSize/4);
       ctx.fillRect(x + (3*squareSize/4), y + (squareSize/4), squareSize/4, squareSize/2);
@@ -235,11 +219,9 @@ $(document).ready(function(){
       ctx.fillRect(x, y, squareSize/4, squareSize);
       ctx.fillRect(x + (3*squareSize/4), y, squareSize/4, squareSize/4);
       ctx.fillRect(x + (3*squareSize/4), y + (3*squareSize/4), squareSize/4, squareSize/4);
-      if(!finished){
-        ctx.fillStyle = "#f98484";
-      }else{
-        ctx.fillStyle = "#ffffff";
-      }
+
+      ctx.fillStyle = color;
+
       ctx.fillRect(x + (squareSize/4), y, squareSize/2, squareSize);
       ctx.fillRect(x + (3*squareSize/4), y + (squareSize/4), squareSize/4, squareSize/2);
       ctx.fillStyle = "#bada55";
@@ -248,11 +230,9 @@ $(document).ready(function(){
       ctx.fillRect(x + (3*squareSize/4), y, squareSize/4, squareSize);
       ctx.fillRect(x, y, squareSize, squareSize/4);
       ctx.fillRect(x, y + (3*squareSize/4), squareSize, squareSize/4);
-      if(!finished){
-        ctx.fillStyle = "#f98484";
-      }else{
-        ctx.fillStyle = "#ffffff";
-      }
+
+      ctx.fillStyle = color;
+
       ctx.fillRect(x, y + (squareSize/4), 3*squareSize/4, squareSize/2);
       ctx.fillStyle = "#bada55";
     //1001 -- west, north
@@ -260,11 +240,9 @@ $(document).ready(function(){
       ctx.fillRect(x, y, squareSize/4, squareSize/4);
       ctx.fillRect(x + (3*squareSize/4), y, squareSize/4, squareSize);
       ctx.fillRect(x, y + (3*squareSize/4), squareSize, squareSize/4);
-      if(!finished){
-        ctx.fillStyle = "#f98484";
-      }else{
-        ctx.fillStyle = "#ffffff";
-      }
+
+      ctx.fillStyle = color;
+
       ctx.fillRect(x + (squareSize/4), y, squareSize/2, 3*squareSize/4);
       ctx.fillRect(x, y + (squareSize/4), squareSize/4, squareSize/2);
       ctx.fillStyle = "#bada55";
@@ -273,11 +251,9 @@ $(document).ready(function(){
       ctx.fillRect(x + (3*squareSize/4), y, squareSize/4, squareSize);
       ctx.fillRect(x, y, squareSize, squareSize/4);
       ctx.fillRect(x, y + (3*squareSize/4), squareSize/4, squareSize/4);
-      if(!finished){
-        ctx.fillStyle = "#f98484";
-      }else{
-        ctx.fillStyle = "#ffffff";
-      }
+
+      ctx.fillStyle = color;
+
       ctx.fillRect(x + (squareSize/4), y + (squareSize/4), squareSize/2, 3*squareSize/4);
       ctx.fillRect(x, y + (squareSize/4), squareSize/4, squareSize/2);
       ctx.fillStyle = "#bada55";
@@ -286,11 +262,9 @@ $(document).ready(function(){
       ctx.fillRect(x + (3*squareSize/4), y, squareSize/4, squareSize);
       ctx.fillRect(x, y, squareSize/4, squareSize/4);
       ctx.fillRect(x, y + (3*squareSize/4), squareSize/4, squareSize/4);
-      if(!finished){
-        ctx.fillStyle = "#f98484";
-      }else{
-        ctx.fillStyle = "#ffffff";
-      }
+
+      ctx.fillStyle = color;
+
       ctx.fillRect(x + (squareSize/4), y, squareSize/2, squareSize);
       ctx.fillRect(x, y + (squareSize/4), squareSize/4, squareSize/2);
       ctx.fillStyle = "#bada55";
@@ -298,11 +272,9 @@ $(document).ready(function(){
     }else if(cellType == 12){
       ctx.fillRect(x, y, squareSize, squareSize/4);
       ctx.fillRect(x, y + (3*squareSize/4), squareSize, squareSize/4);
-      if(!finished){
-        ctx.fillStyle = "#f98484";
-      }else{
-        ctx.fillStyle = "#ffffff";
-      }
+
+      ctx.fillStyle = color;
+
       ctx.fillRect(x, y + (squareSize/4), squareSize, squareSize/2);
       ctx.fillStyle = "#bada55";
     //1101 -- west, east, north
@@ -310,11 +282,9 @@ $(document).ready(function(){
       ctx.fillRect(x + (3*squareSize/4), y, squareSize/4, squareSize/4);
       ctx.fillRect(x, y, squareSize/4, squareSize/4);
       ctx.fillRect(x, y + (3*squareSize/4), squareSize, squareSize/4);
-      if(!finished){
-        ctx.fillStyle = "#f98484";
-      }else{
-        ctx.fillStyle = "#ffffff";
-      }
+
+      ctx.fillStyle = color;
+
       ctx.fillRect(x, y + (squareSize/4), squareSize, squareSize/2);
       ctx.fillRect(x + (squareSize/4), y, squareSize/2, squareSize/4);
       ctx.fillStyle = "#bada55";
@@ -323,11 +293,9 @@ $(document).ready(function(){
       ctx.fillRect(x + (3*squareSize/4), y + (3*squareSize/4), squareSize/4, squareSize/4);
       ctx.fillRect(x, y, squareSize, squareSize/4);
       ctx.fillRect(x, y + (3*squareSize/4), squareSize/4, squareSize/4);
-      if(!finished){
-        ctx.fillStyle = "#f98484";
-      }else{
-        ctx.fillStyle = "#ffffff";
-      }
+
+      ctx.fillStyle = color;
+
       ctx.fillRect(x, y + (squareSize/4), squareSize, squareSize/2);
       ctx.fillRect(x + (squareSize/4), y + (3*squareSize/4), squareSize/2, squareSize/4);
       ctx.fillStyle = "#bada55";
@@ -337,11 +305,9 @@ $(document).ready(function(){
       ctx.fillRect(x, y, squareSize/4, squareSize/4);
       ctx.fillRect(x, y + (3*squareSize/4), squareSize/4, squareSize/4);
       ctx.fillRect(x + (3*squareSize/4), y + (3*squareSize/4), squareSize/4, squareSize/4);
-      if(!finished){
-        ctx.fillStyle = "#f98484";
-      }else{
-        ctx.fillStyle = "#ffffff";
-      }
+
+      ctx.fillStyle = color;
+
       ctx.fillRect(x, y + (squareSize/4), squareSize, squareSize/2);
       ctx.fillRect(x + (squareSize/4), y + (3*squareSize/4), squareSize/2, squareSize/4);
       ctx.fillRect(x + (squareSize/4), y, squareSize/2, squareSize/4);
