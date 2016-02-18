@@ -117,6 +117,30 @@ $(document).ready(function(){
     return path;
   }
 
+  function enumerateExits(encoding){
+    var exits = [];
+    console.log(encoding);
+    var currEncoding = encoding;
+    if(currEncoding >= 8){
+      exits.push(directions.west);
+      currEncoding -= 8;
+    }
+    if(currEncoding >= 4){
+      exits.push(directions.east);
+      currEncoding -= 4;
+    }
+    if(currEncoding >= 2){
+      exits.push(directions.south);
+      currEncoding -= 2;
+    }
+    if(currEncoding >= 1){
+      exits.push(directions.north);
+      currEncoding -= 1;
+    }
+    //console.log("exits: ", exits);
+    return exits;
+  }
+
   function isBetween(num, lower, upper){
     return (num >= lower && num <= upper);
   }
@@ -315,6 +339,23 @@ $(document).ready(function(){
     }
   }
 
+  function analyzeMaze(mazeArr, xIndex, yIndex){
+    setTimeout(function(){
+      console.log(yIndex + ", " + xIndex + ": " + enumerateExits(mazeArr[yIndex][xIndex]));
+      drawCell(mazeArr[yIndex][xIndex], yIndex, xIndex, "#00cfbc");
+      if(yIndex < mazeArr.length){
+        if(xIndex < mazeArr[yIndex].length - 1){
+          newY = yIndex;
+          newX = xIndex + 1;
+        }else{
+          newY = yIndex + 1;
+          newX = 0;
+        }
+        analyzeMaze(mazeArr, newX, newY);
+      }
+    },10);
+  }
+
   function init() {
     ctx = $('#mazeCanvas')[0].getContext("2d");
 
@@ -338,7 +379,10 @@ $(document).ready(function(){
         finished : true
     });
 
-    printPath(0);
+
+    //printPath(0);
+
+    analyzeMaze(mazeArr, 0, 0);
   }
 
   init();
