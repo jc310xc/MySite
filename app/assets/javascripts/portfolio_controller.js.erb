@@ -29,25 +29,30 @@ $(document).ready(function(){
   var mazeArr;
   var path = [];
 
-  var north = 1, south = 2, east = 4, west = 8;
+  var directions = {
+    north: 1,
+    south: 2,
+    east: 4,
+    west: 8
+  };
 
   var dx = [];
-  dx[north] = 0;
-  dx[south] = 0;
-  dx[east] = 1;
-  dx[west] = -1;
+  dx[directions.north] = 0;
+  dx[directions.south] = 0;
+  dx[directions.east] = 1;
+  dx[directions.west] = -1;
 
   var dy = [];
-  dy[north] = -1;
-  dy[south] = 1;
-  dy[east] = 0;
-  dy[west] = 0;
+  dy[directions.north] = -1;
+  dy[directions.south] = 1;
+  dy[directions.east] = 0;
+  dy[directions.west] = 0;
 
   var opposite = [];
-  opposite[north] = south;
-  opposite[south] = north;
-  opposite[east] = west;
-  opposite[west] = east;
+  opposite[directions.north] = directions.south;
+  opposite[directions.south] = directions.north;
+  opposite[directions.east] = directions.west;
+  opposite[directions.west] = directions.east;
 
   var count = 0;
 
@@ -72,7 +77,7 @@ $(document).ready(function(){
   }
 
   function carve_passages_from(count, cx, cy, maze){
-    var dirs = shuffleArray([north, south, east, west]);
+    var dirs = shuffleArray([directions.north, directions.south, directions.east, directions.west]);
 
     //logMaze(maze);
 
