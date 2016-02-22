@@ -158,10 +158,10 @@ $(document).ready(function(){
 
   function printPath(index){
     if(index < path.length){
-      var color = "#ffffff"
+      var color = "#ffffff";
 
-      if(!path[index]){
-        color = "#f98484"
+      if(!path[index].finished){
+        color = "#f98484";
       }
 
       drawCell(path[index].direction, path[index].xCoord, path[index].yCoord, color);
