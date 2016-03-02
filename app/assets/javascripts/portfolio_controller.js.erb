@@ -94,7 +94,8 @@ $(document).ready(function(){
           xCoord : cx,
           yCoord : cy,
           direction : maze[cx][cy],
-          finished : false
+          color : "#f98484",
+          animationDuration : 1
         };
         path.push(node);
         count++;
@@ -109,7 +110,8 @@ $(document).ready(function(){
       xCoord : cx,
       yCoord : cy,
       direction : maze[cx][cy],
-      finished : true
+      color : "#ffffff",
+      animationDuration : 1
     };
 
     path.push(node);
@@ -158,18 +160,27 @@ $(document).ready(function(){
 
   function printPath(index){
     if(index < path.length){
-      var color = "#ffffff";
+      var cell = path[index];
 
-      if(!path[index].finished){
-        color = "#f98484";
+      drawCell(cell.direction, cell.xCoord, cell.yCoord, cell.color);
+
+      console.log("animationDuration: " + cell.animationDuration);
+
+      if(index < path.length -1){
+        setTimeout(function(){
+          printPath(index+1);
+        }, path[index+1].animationDuration);
       }
-
-      drawCell(path[index].direction, path[index].xCoord, path[index].yCoord, color);
-
-      setTimeout(function(){
-        printPath(index+1);
-      }, 1);
     }
+  }
+
+  function solveMaze(maze){
+    var exits = enumerateExits(maze[0][0]);
+
+    exits.forEach(function(el){
+
+    });
+    return 1;
   }
 
   function drawCell(cellType, xCoord, yCoord, color){
@@ -339,23 +350,6 @@ $(document).ready(function(){
     }
   }
 
-  function analyzeMaze(mazeArr, xIndex, yIndex){
-    setTimeout(function(){
-      console.log(yIndex + ", " + xIndex + ": " + enumerateExits(mazeArr[yIndex][xIndex]));
-      drawCell(mazeArr[yIndex][xIndex], yIndex, xIndex, "#00cfbc");
-      if(yIndex < mazeArr.length){
-        if(xIndex < mazeArr[yIndex].length - 1){
-          newY = yIndex;
-          newX = xIndex + 1;
-        }else{
-          newY = yIndex + 1;
-          newX = 0;
-        }
-        analyzeMaze(mazeArr, newX, newY);
-      }
-    },10);
-  }
-
   function init() {
     ctx = $('#mazeCanvas')[0].getContext("2d");
 
@@ -369,20 +363,23 @@ $(document).ready(function(){
         xCoord : 0,
         yCoord : 0,
         direction : mazeArr[0][0] + 1,
-        finished : true
+        color : "#ffffff",
+        animationDuration : 1
     });
 
     path.push({
         xCoord : xMax - 1,
         yCoord : yMax - 1,
         direction : mazeArr[xMax - 1][yMax - 1] + 2,
-        finished : true
+        color : "#ffffff",
+        animationDuration : 1
     });
 
+    var solutionList = solveMaze(mazeArr);
 
-    //printPath(0);
+    printPath(0);
 
-    analyzeMaze(mazeArr, 0, 0);
+
   }
 
   init();
