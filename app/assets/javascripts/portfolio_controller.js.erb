@@ -36,6 +36,18 @@ $(document).ready(function(){
     west: 8
   };
 
+  var NodeFactory = {
+    create : function(x, y, directions, color, duration){
+      return {
+        xCoord : x,
+        yCoord : y,
+        direction : directions,
+        color : color,
+        animationDuration : duration
+      };
+    }
+  }
+
   var dx = [];
   dx[directions.north] = 0;
   dx[directions.south] = 0;
@@ -90,14 +102,10 @@ $(document).ready(function(){
       if(isBetween(nx, 0, maze.length - 1) && (isBetween(ny, 0, maze[0].length - 1) && maze[nx][ny] == 0)){
         maze[cx][cy] += dir;
         maze[nx][ny] += opposite[dir];
-        var node = {
-          xCoord : cx,
-          yCoord : cy,
-          direction : maze[cx][cy],
-          color : "#f98484",
-          animationDuration : 1
-        };
+
+        var node = NodeFactory.create(cx, cy, maze[cx][cy], "#f98484", 1);
         path.push(node);
+
         count++;
         carve_passages_from(count, nx, ny, maze);
         // setTimeout(function(){
@@ -106,13 +114,7 @@ $(document).ready(function(){
       }
     });
 
-    var node = {
-      xCoord : cx,
-      yCoord : cy,
-      direction : maze[cx][cy],
-      color : "#ffffff",
-      animationDuration : 1
-    };
+    var node = NodeFactory.create(cx, cy, maze[cx][cy], "#ffffff", 1);
 
     path.push(node);
 
@@ -359,21 +361,9 @@ $(document).ready(function(){
     var mazeArr = initMaze();
     path = carve_passages_from(0, Math.round(Math.random() * (xMax - 1)), Math.round(Math.random() * (yMax - 1)), mazeArr);
 
-    path.push({
-        xCoord : 0,
-        yCoord : 0,
-        direction : mazeArr[0][0] + 1,
-        color : "#ffffff",
-        animationDuration : 1
-    });
+    path.push(NodeFactory.create(0,0, mazeArr[0][0] + 1, "#ffffff", 1));
 
-    path.push({
-        xCoord : xMax - 1,
-        yCoord : yMax - 1,
-        direction : mazeArr[xMax - 1][yMax - 1] + 2,
-        color : "#ffffff",
-        animationDuration : 1
-    });
+    path.push(NodeFactory.create(xMax - 1, yMax - 1, mazeArr[xMax - 1][yMax - 1] + 2, "#ffffff", 1));
 
     var solutionList = solveMaze(mazeArr);
 
