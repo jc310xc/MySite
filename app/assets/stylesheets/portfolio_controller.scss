@@ -10,21 +10,30 @@ body{
   color:#FFFFFF;
 }
 
+div#content {
+  width:1000px;
+  margin:0 auto;
+}
+
 #hero p{
   font-size:32px;
 }
 
 div#hero{
   width:50%;
-  margin: 0 auto 100px auto;
-}
-
-div#maze-container{
-  width:1000px;
-  margin:0 auto;
+  margin-bottom: 100px;
 }
 
 #mazeCanvas{
-  width:1000px;
   background-color: #FFFFFF;
+}
+
+div#projects{
+  margin-top:100px;
+}
+
+a.project-card{
+  display:inline-block;
+  max-width:200px;
+  margin: 0 30px;
 }

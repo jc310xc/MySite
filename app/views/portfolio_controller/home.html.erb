@@ -1,14 +1,13 @@
-<div id="hero">
-  <p>HEYOOOO, Bitchez</p>
-</div>
-<div id="maze-container">
-  <canvas id="mazeCanvas" height="480" width="992"></canvas>
-</div>
-<div id="projects">
-  <% @projects.each do |project| %>
-  <a class="project-card" href="#">
-    <img class="project-pic" src="<%= project.images %>" />
-    <h3><%= project.title %></h3>
-  </a>
-  <% end %>
+<div id="content">
+  <div id="hero">
+    <p>HEYOOOO, Bitchez</p>
+  </div>
+  <div id="maze-container">
+    <canvas id="mazeCanvas" height="480" width="992"></canvas>
+  </div>
+  <div id="projects">
+    <% @projects.each do |project| %>
+      <%= render partial: "projects/project_card", locals: {project: project} %>
+    <% end %>
+  </div>
 </div>
