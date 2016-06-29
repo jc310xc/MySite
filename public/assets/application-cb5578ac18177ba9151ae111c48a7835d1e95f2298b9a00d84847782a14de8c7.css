@@ -1,0 +1,56 @@
+/* line 4, /home/peter/programming/MySite/app/assets/stylesheets/portfolio_controller.scss */
+body {
+  background-image: url(/assets/dark_mosaic-9ecf958ab57002f5224ba290e89640ee2aa12175417c45c5097723fa70ecc037.png);
+  font-family: "sail", sans-serif;
+  color: #FFFFFF;
+}
+
+/* line 13, /home/peter/programming/MySite/app/assets/stylesheets/portfolio_controller.scss */
+div#content {
+  width: 1000px;
+  margin: 0 auto;
+}
+
+/* line 18, /home/peter/programming/MySite/app/assets/stylesheets/portfolio_controller.scss */
+#hero p {
+  font-size: 32px;
+}
+
+/* line 22, /home/peter/programming/MySite/app/assets/stylesheets/portfolio_controller.scss */
+div#hero {
+  width: 50%;
+  margin-bottom: 100px;
+}
+
+/* line 27, /home/peter/programming/MySite/app/assets/stylesheets/portfolio_controller.scss */
+#mazeCanvas {
+  background-color: #FFFFFF;
+}
+
+/* line 31, /home/peter/programming/MySite/app/assets/stylesheets/portfolio_controller.scss */
+div#projects {
+  margin-top: 100px;
+}
+
+/* line 35, /home/peter/programming/MySite/app/assets/stylesheets/portfolio_controller.scss */
+a.project-card {
+  display: inline-block;
+  max-width: 200px;
+  margin: 0 30px;
+}
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *
+
+
+ */
+
